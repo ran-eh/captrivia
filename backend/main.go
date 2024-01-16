@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"sync"
 	"time"
 
@@ -67,9 +68,15 @@ func main() {
 		log.Fatalf("Server setup failed: %v", err)
 	}
 
+	// set port to PORT or 8080
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	// Start the server
-	log.Println("Server starting on :8080...")
-	log.Fatal(router.Run(":8080"))
+	log.Println("Server starting on port " + port)
+	log.Fatal(router.Run(":" + port))
 }
 
 // setupServer configures and returns a new Gin instance with all routes.
