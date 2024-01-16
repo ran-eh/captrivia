@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./App.css";
 
-const API_BASE = "http://localhost:8080"; // Replace with your actual API base URL
+// Use REACT_APP_BACKEND_URL or http://localhost:8080 as the API_BASE
+const API_BASE = process.env.REACT_APP_BACKEND_URL || "http://localhost:8080";
 
 function App() {
   const [gameSession, setGameSession] = useState(null);
