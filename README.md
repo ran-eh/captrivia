@@ -1,48 +1,44 @@
-# CapTrivia: A Pulley Coding Challenge
+# CapTrivia: Cap Table Trivia Game
 
-## Overview
+## Introduction
+Welcome to CapTrivia, a cap table trivia game developed by Pulley. This project is part of our engineering interview process, designed to assess your coding skills and problem-solving abilities. Currently, CapTrivia is a simple, single-player game. Your challenge is to develop it into a multiplayer experience.
 
-Welcome to CapTrivia, a unique coding challenge designed by Pulley to assess the skills and creativity of prospective software engineers. This project encompasses a simple trivia application and serves as a platform for candidates to demonstrate their abilities in a real-world scenario.
+## Project Overview
+- **Current State**: CapTrivia is a functioning single-player game with basic features. We tried our best to make it very ugly so that you have lots of room to improve it!
+- **Tech Stack**: The front end is built with React (in `App.js`), and the back end with Go (in `main.go`). We also included a docker-compose.yml so that you can easily run this locally (it includes a PostgreSQL instance).
+- **Objective**: Transform CapTrivia into a multiplayer game where users can create games, invite others via a shareable link, and compete in real-time trivia challenges.
 
-## Project Structure
+## Quickstart
 
-- **Backend**: Written in Go.
-- **Frontend**: Developed using React.
-- **Database**: Postgres (integrated via Docker Compose but not yet utilized).
+1. Make sure you have Docker installed. https://docs.docker.com/engine/install/
+2. In the captrivia root directory, run `docker compose up`.
+3. Open http://localhost:3000 in your browser to see the game.
 
-Upon launching, CapTrivia operates as a single-player trivia game. Currently, it includes 20 sample trivia questions. Players can view their scores after participating.
+## Your Task
+1. **Refactor and Enhance**: The current code is intentionally basic and contained in single files for both front and back ends. Your first task is to clean up and structure the codebase.
+2. **Implement Multiplayer Functionality**: 
+    - Allow users to start a new game and generate a shareable link.
+    - Enable real-time joining of players in a waiting room.
+    - Implement a countdown and start the game simultaneously for all players.
+    - Introduce a scoring system with a configurable number of questions (default: 10).
+    - Players will compete to answer each question first. For each question, the player who answers first gets the points.
+    - Display the winner at the end and allow users to start new games.
 
-## Your Mission
+## Time Allocation
+You should aim to spend no more than 2 hours on this challenge. We respect your time and want to see what you can achieve within these constraints.
 
-Your task is to explore, analyze, and enhance CapTrivia. The code quality is intentionally imperfect, offering ample opportunities for improvement and innovation. You're encouraged to approach this project as you would a typical day at Pulley - using any tools, resources, and methodologies at your disposal.
-
-### Possible Extensions
-
-1. **Multiplayer Functionality**: Transform CapTrivia into a multiplayer experience. Players should be able to start a game, invite friends via a link, and compete in real-time.
-
-2. **Aesthetic Overhaul**: The UI/UX of CapTrivia is basic. We invite you to revamp it, showcasing your skills in creating engaging and user-friendly interfaces.
-
-3. **Code Refinement**: Assess the existing codebase for potential improvements in efficiency, structure, and readability.
-
-4. **Incorporate the Database**: Utilize the Postgres database to enhance the application's functionality.
-
-## Guidelines
-
-- Spend time before the interview to understand and extend the project.
-- During the 60-minute coding interview, continue to develop the application, focusing on areas you've identified as key improvement points.
-- As much as possible, we're trying to make this a simulation of a normal day on the job. To that end, feel free to do anything you'd normally do to work efficiently -- pull in open source packages, use Github Copilot/ChatGPT, etc.
+## Submission Guidelines
+- **Git Patch**: Submit your solution as a Git patch file. This allows us to easily review your changes against our original code.
+- **Running Locally**: Please ensure that we can run your version with `docker compose up`.
 
 ## Evaluation Criteria
+- **Code Quality**: Clean, readable, and well-structured code.
+- **Problem Solving**: Effective and efficient solutions to the challenges presented.
+- **Creativity**: We appreciate innovative approaches and ideas.
+- **Tool Utilization**: Feel free to use tools like GitHub Copilot and ChatGPT. We value efficiency and resourcefulness.
 
-We'll assess your work based on:
+## After Submission
+Once we receive your solution, we'll schedule a live code pairing session. Here, you'll walk us through your code, and we'll collaboratively work on an additional small feature.
 
-- **Code Quality**: Clean, readable, and efficient code.
-- **Problem Solving**: Effectiveness in identifying and addressing the project's shortcomings.
-- **Creativity and Innovation**: How you enhance the application's functionality and user experience.
-- **Use of Tools and Resources**: Effective use of available tools and resources to aid in your development process.
-
-Good luck, and we look forward to seeing your version of CapTrivia!
-
----
-
-_This project is part of the Pulley interview process and is aimed at evaluating the real-world skills of candidates._
+## Conclusion
+Thank you for participating in Pulley's engineering challenge. We're excited to see your approach to enhancing CapTrivia. Good luck, and have fun!
