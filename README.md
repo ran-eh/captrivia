@@ -25,7 +25,9 @@ Welcome to CapTrivia, a cap table trivia game developed by Pulley. This project 
     - Display the winner at the end and allow users to start new games.
 
 ## Time Allocation
-You should aim to spend no more than 5 hours on this challenge. We respect your time and want to see what you can achieve within these constraints.
+There is no time restrictions on this challenge, you can take as much time as you need. This is to allow folks who might not know the tech stack to spend time learning or if you wanted to take the challenge to the next level. The most important part is achieving the task above.
+
+As a baseline for someone proficient in the stack we expect this challenge to take around 3-5 hours. This figure is only to help set your own expectations about how much time you may need to allocate to complete it.
 
 ## Submission Guidelines
 - **Git Patch**: Submit your solution as a Git patch file(s). This allows us to easily review your changes against our original code. You can do this with `git diff starting_commit..HEAD > captrivia.patch` or `git format-patch --root start_commit..HEAD` (start_commit should be the commit *before* your first commit, it will not be included in the diff/patch).
