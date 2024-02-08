@@ -17,7 +17,7 @@ services:
       - type: bind
         source: ./backend
         target: /app
-    command: go run main.go
+    command: go run .
 
   frontend:
     build: ./frontend
