@@ -61,6 +61,10 @@ Thumbs.db
 /cleanbackend/go.sum
 /cleanbackend/vendor/
 
+# Python #
+##########
+/bot/__pycache__/
+
 # Editor directories and files #
 ################################
 .idea

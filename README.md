@@ -14,7 +14,10 @@ Welcome to CapTrivia, a cap table trivia game developed by Pulley. This project 
 2. In the captrivia root directory, run `docker compose up`.
 3. Open http://localhost:3000 in your browser to see the game.
 
-## Your Task
+## Tasks
+Please complete the task appropriate to the position you are applying for.
+
+### Software Engineers
 1. **Refactor and Enhance**: The current code is intentionally basic and contained in single files for both front and back ends. Your first task is to clean up and structure the codebase.
 2. **Implement Multiplayer Functionality**: 
     - Allow users to start a new game and generate a shareable link.
@@ -23,6 +26,14 @@ Welcome to CapTrivia, a cap table trivia game developed by Pulley. This project 
     - Introduce a scoring system with a configurable number of questions (default: 10).
     - Players will compete to answer each question first. For each question, the player who answers first gets the points.
     - Display the winner at the end and allow users to start new games.
+
+### Data Engineers
+Your task is to build a data pipeline to record and visualize analytics information about a player's performance.
+  - Stand up an analytics database: you may use the existing PostgreSQL database in the docker-compose.yml, or any other database of your choice.
+  - Instrument the backend application to report data on each answered question to the database.
+  - Start up the bot provided in [bot](bot) to start playing games and feeding data into your database.  Right now the bot uses a very simple strategy (always choosing the first answer); you will likely want to change its strategy to create more interesting data.  If you like, your bot can "cheat" by using [questions.json](backend/questions.json) to sometimes figure out the right answer.
+  - Build and display some simple analytics on top of your analytics database.
+
 
 ## Time Allocation
 There is no time restrictions on this challenge, you can take as much time as you need. This is to allow folks who might not know the tech stack to spend time learning or if you wanted to take the challenge to the next level. The most important part is achieving the task above.
