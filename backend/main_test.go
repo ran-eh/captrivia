@@ -113,6 +113,12 @@ func TestFullGame(t *testing.T) {
 
 	// Answer each question (assuming the answer is always the first option)
 	for _, question := range questions {
+		// Make sure we haven't been given the answer.  We're using the same struct here for the server-side
+		// handler and the "client", so if it wasn't set it should always be 0
+		if question.CorrectIndex != 0 {
+			t.Fatalf("Backend returned answer index")
+		}
+
 		answerPayload := fmt.Sprintf(`{"sessionId":"%s", "questionId":"%s", "answer":%d}`, sessionID, question.ID, 0)
 		answerReader := strings.NewReader(answerPayload)
 		resp, err = http.Post(testServer.URL+"/answer", "application/json", answerReader)

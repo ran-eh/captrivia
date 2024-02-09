@@ -187,7 +187,13 @@ func (gs *GameServer) checkAnswer(questionID string, submittedAnswer int) (bool,
 func shuffleQuestions(questions []Question) []Question {
 	rand.Seed(time.Now().UnixNano())
 	qs := make([]Question, len(questions))
-	copy(qs, questions)
+
+	// Copy the questions manually, instead of with copy(), so that we can remove
+	// the CorrectIndex property
+	for i, q := range questions {
+		qs[i] = Question{ID: q.ID, QuestionText: q.QuestionText, Options: q.Options}
+	}
+
 	rand.Shuffle(len(qs), func(i, j int) {
 		qs[i], qs[j] = qs[j], qs[i]
 	})
