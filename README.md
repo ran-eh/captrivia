@@ -41,7 +41,7 @@ There is no time restrictions on this challenge, you can take as much time as yo
 As a baseline for someone proficient in the stack we expect this challenge to take around 3-5 hours. This figure is only to help set your own expectations about how much time you may need to allocate to complete it.
 
 ## Submission Guidelines
-- **Zip File**: Zip up the code directory and send it to us. Please make sure you delete `node_modules` and any Go binaries that would bloat the zip. Leaving the `.git` directory is preferred so we can see the history of how you implemented your solution.
+- **Zip File**: Zip up the code directory and send it to us. Please make sure you delete `node_modules` and any Go binaries that would bloat the zip. Leaving the `.git` directory is preferred so we can see the history of how you implemented your solution. To automatically clean files that are not in git, you can use `git clean -fd` (with appropriate caution as this deletes files).
 - **Running Locally**: Please ensure that we can run your version with `docker compose up`.
 
 ## Evaluation Criteria
