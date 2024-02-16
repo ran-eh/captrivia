@@ -41,7 +41,7 @@ There is no time restrictions on this challenge, you can take as much time as yo
 As a baseline for someone proficient in the stack we expect this challenge to take around 3-5 hours. This figure is only to help set your own expectations about how much time you may need to allocate to complete it.
 
 ## Submission Guidelines
-- **Git Patch**: Submit your solution as a Git patch file(s). This allows us to easily review your changes against our original code. You can do this by commiting all of your changes (remembering to include new files), and then running `git diff starting_commit..HEAD > captrivia.patch` or `git format-patch --root start_commit..HEAD` (start_commit should be the commit *before* your first commit, it will not be included in the diff/patch).
+- **Zip File**: Zip up the code directory and send it to us. Please make sure you delete `node_modules` and any Go binaries that would bloat the zip. Leaving the `.git` directory is preferred so we can see the history of how you implemented your solution.
 - **Running Locally**: Please ensure that we can run your version with `docker compose up`.
 
 ## Evaluation Criteria
