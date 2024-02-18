@@ -115,3 +115,4 @@ Thumbs.db
 *.pdb
 *.opendb
 *.db
+backend/__debug_*
