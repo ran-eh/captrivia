@@ -62,6 +62,10 @@ type GameServer struct {
 }
 
 func main() {
+
+	EventServiceConnect()
+	defer EventServiceClose()
+
 	// Setup the server
 	router, err := setupServer()
 	if err != nil {
@@ -115,6 +119,21 @@ func NewGameServer(questions []Question, store *SessionStore) *GameServer {
 }
 
 func (gs *GameServer) StartGameHandler(c *gin.Context) {
+
+	// contextJson, err := json.Marshal(c.Request.Header)
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid context: " + err.Error()})
+	// 	return
+	// }
+	EventServicePost(
+		"backend", 
+		"GameStart", 
+		struct{ data string `json:"data"`}{data: "data"}, 
+		struct{ context string`json:"context"`}{context: "context"}, 
+		
+	)
+
+
 	sessionID := gs.Sessions.CreateSession()
 	c.JSON(http.StatusOK, gin.H{"sessionId": sessionID})
 }
