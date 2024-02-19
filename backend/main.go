@@ -63,7 +63,7 @@ type GameServer struct {
 
 func main() {
 
-	EventServiceConnect()
+	Db = EventServiceConnect()
 	defer EventServiceClose()
 
 	// Setup the server
@@ -128,9 +128,8 @@ func (gs *GameServer) StartGameHandler(c *gin.Context) {
 	EventServicePost(
 		"backend", 
 		"GameStart", 
-		struct{ data string `json:"data"`}{data: "data"}, 
-		struct{ context string`json:"context"`}{context: "context"}, 
-		
+		struct{ Data string}{Data: "data"}, 
+		struct{ Context string}{Context: "context"}, 
 	)
 
 

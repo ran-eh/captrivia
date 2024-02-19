@@ -28,7 +28,7 @@ func EventServiceConnect() *sql.DB {
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
+	// defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
@@ -36,7 +36,6 @@ func EventServiceConnect() *sql.DB {
 	}
 
 	fmt.Println("Successfully connected!")
-
 	return db
 }
 
@@ -53,11 +52,15 @@ func EventServicePost(program string, _type string, data interface{}, context in
 	if err != nil{
 		return err
 	}
-	sql := `
+
+	sqlFmt := `
 	INSERT INTO events (program, type, data, context)
-	VALUES ($1, $2, $3, $4)
+	VALUES ($1, $2, '%s', '%s')
 	`
-	_, err = Db.Exec(sql, program, _type, dataJson, contextJson)
+	sql := fmt.Sprintf(sqlFmt, string(dataJson), string(contextJson))
+	
+
+	_, err = Db.Exec(sql, program, _type)
 	
 	fmt.Println(program, _type, data, context)
 	return err
