@@ -4,7 +4,10 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"log"
+	"time"
 
+	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 )
 
@@ -28,14 +31,9 @@ func EventServiceConnect() *sql.DB {
 	if err != nil {
 		panic(err)
 	}
-	// defer db.Close()
 
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
+	log.Printf("Successfully connectes to pg server: %s:%d.%s", host, port, dbname)
 
-	fmt.Println("Successfully connected!")
 	return db
 }
 
@@ -43,25 +41,27 @@ func EventServiceClose() {
 	Db.Close()
 }
 
-func EventServicePost(program string, _type string, data interface{}, context interface{}) error {
-	dataJson, err := json.Marshal(data)
-	if err != nil{
-		return err
-	}
-	contextJson, err := json.Marshal(context)
-	if err != nil{
+func EventServicePost(ev *Event) error {
+	ev.EventId = uuid.New().String()
+	ev.Timestamp = time.Now()
+	ev.Program = "backend"
+	// dataJson, err := json.Marshal(ev.Data)
+	// if err != nil {
+	// 	return err
+	// }
+	contextJson, err := json.Marshal(ev.Context)
+	if err != nil {
 		return err
 	}
 
 	sqlFmt := `
-	INSERT INTO events (program, type, data, context)
-	VALUES ($1, $2, '%s', '%s')
+	INSERT INTO events (timestamp, event_id, session_id, program, type, data, context)
+	VALUES ($1, '%s', $2, $3, $4, $5, '%s')
 	`
-	sql := fmt.Sprintf(sqlFmt, string(dataJson), string(contextJson))
-	
+	sql := fmt.Sprintf(sqlFmt, ev.EventId, string(contextJson))
 
-	_, err = Db.Exec(sql, program, _type)
-	
-	fmt.Println(program, _type, data, context)
+	_, err = Db.Exec(sql, ev.Timestamp, ev.SessionID, ev.Program, ev.Type, ev.Data)
+
+	log.Println(ev)
 	return err
 }

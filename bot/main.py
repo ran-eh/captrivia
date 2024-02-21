@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import random
 from captrivia import Captrivia
 
 # Simple bot to play Captrivia.  Starts a new game, answers all of the questions, ends the game, and starts
@@ -22,9 +23,13 @@ while True:
     questions = cap.get_questions()
     for question in questions:
         qid = question["id"]
-        # For now we always choose the first answer.  This should probably
-        # be changed!
-        cap.answer_question(qid, 0)
+        # Choose the correct answer 70% of the time
+        if random.random() < 0.7:
+            answer = question["correctIndex"]
+        else:
+            answer = question["correctIndex"] + 1 % len(question["options"])
+
+        cap.answer_question(qid, answer)
 
     # End the game
     cap.end_game()
