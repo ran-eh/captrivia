@@ -31,8 +31,10 @@ while True:
 
         cap.answer_question(qid, answer)
 
-    # End the game
-    cap.end_game()
+    # abandon game 5% of the time
+    if random.random() > 0.05:
+        # End the game
+        cap.end_game()
 
     # Do some logging so we can see how many answers we've given
     game_count += 1
