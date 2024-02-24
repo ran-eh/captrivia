@@ -22,6 +22,8 @@ const (
 // TODO: instead of using a global, use a closure as shown in
 // https://stackoverflow.com/questions/34046194/how-to-pass-arguments-to-router-handlers-in-golang-using-gin-web-framework
 var Db *sql.DB
+// Change to get events logged in the past for testing
+var ShiftDateDays int = 0
 
 func EventServiceConnect() *sql.DB {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
@@ -43,7 +45,7 @@ func EventServiceClose() {
 
 func EventServicePost(ev *Event) error {
 	ev.EventId = uuid.New().String()
-	ev.Timestamp = time.Now()
+	ev.Timestamp = time.Now().AddDate(0, 0, ShiftDateDays)
 	ev.Program = "backend"
 	// dataJson, err := json.Marshal(ev.Data)
 	// if err != nil {
