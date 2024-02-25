@@ -115,8 +115,9 @@ Thumbs.db
 *.pdb
 *.opendb
 *.db
+
+
 backend/__debug_*
-jupyter/.ipynb_checkpoints
 .ipynb_checkpoints
 jupyter/logs
 *.code-workspace
