@@ -33,7 +33,7 @@ for shift_days in range(-9, 1):
         for question in questions:
             qid = question["id"]
             # Choose the correct answer 70% of the time
-            if random.random() < 0.7:
+            if random.random() < success_rate:
                 answer = question["correctIndex"]
             else:
                 answer = question["correctIndex"] + 1 % len(question["options"])
