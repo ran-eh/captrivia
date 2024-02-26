@@ -56,3 +56,16 @@ class Captrivia:
     def ensure_in_game(self):
         if not self.session_id:
             raise Exception("Not currently in a game!")
+        
+        # Answer a question.  Returns whether we were correct
+    def debug_shift_days(self, shift_days):
+
+        # Do the request to answer the question
+        body = {
+            "ShiftDateDays": shift_days,
+        }
+        result = requests.post(self.url + "/debug/shiftdays", json=body)
+
+        # Return whether we were correct
+        return result.json()
+

@@ -16,6 +16,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// TODO: instead of using a global, use a closure as shown in
+// https://stackoverflow.com/questions/34046194/how-to-pass-arguments-to-router-handlers-in-golang-using-gin-web-framework
+var eventSender *EventSender;
+
 type Question struct {
 	ID           string   `json:"id"`
 	QuestionText string   `json:"questionText"`
@@ -62,9 +66,9 @@ type GameServer struct {
 }
 
 func main() {
+	eventSender = NewEventSender()
 
-	Db = EventServiceConnect()
-	defer EventServiceClose()
+	defer eventSender.Close()
 
 	// Setup the server
 	router, err := setupServer()
@@ -107,6 +111,7 @@ func setupServer() (*gin.Engine, error) {
 	router.GET("/questions", server.QuestionsHandler)
 	router.POST("/answer", server.AnswerHandler)
 	router.POST("/game/end", server.EndGameHandler)
+	router.POST("/debug/shiftdays", server.ShiftDaysHandler)
 
 	return router, nil
 }
@@ -120,19 +125,13 @@ func NewGameServer(questions []Question, store *SessionStore) *GameServer {
 
 func (gs *GameServer) StartGameHandler(c *gin.Context) {
 
-	// contextJson, err := json.Marshal(c.Request.Header)
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid context: " + err.Error()})
-	// 	return
-	// }
 	sessionID := gs.Sessions.CreateSession()
 	c.JSON(http.StatusOK, gin.H{"sessionId": sessionID})
 
-	EventServicePost(&Event{
+	eventSender.Send(&Event{
 		SessionID: sessionID,
 		Type:      "start_game",
 		Data:      fmt.Sprintf("{\"sessionId\": \"%s\"}", sessionID),
-		// Context: *c.Request,
 	})
 }
 
@@ -140,13 +139,11 @@ func (gs *GameServer) QuestionsHandler(c *gin.Context) {
 	shuffledQuestions := shuffleQuestions(gs.Questions)
 	questions := shuffledQuestions[:10]
 	json, _ := json.Marshal(questions)
-	// log.Println(json)
-	// log.Println(err)
 	c.JSON(http.StatusOK, questions)
 	
 	// TODO: Session ID not available for this call.  Suggest including
 	// it in the call to allow linking the call to a session.
-	EventServicePost(&Event{
+	eventSender.Send(&Event{
 		Type:      "get_questions",
 		Data: string(json),
 	})
@@ -196,11 +193,10 @@ func (gs *GameServer) AnswerHandler(c *gin.Context) {
 
 	json, _ := json.Marshal(eventData)
 
-	EventServicePost(&Event{
+		eventSender.Send(&Event{
 		SessionID: submittedAnswer.SessionID,
 		Type:      "answer",
 		Data:      string(json),
-		// Context: *c.Request,
 	})
 
 }
@@ -221,12 +217,24 @@ func (gs *GameServer) EndGameHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"finalScore": session.Score})
-	EventServicePost(&Event{
+	eventSender.Send(&Event{
 		SessionID: request.SessionID,
 		Type:      "end_game",
 		Data:      fmt.Sprintf("{\"finalScore\": \"%d\"}", session.Score),
-		// Context: *c.Request,
 	})
+}
+
+func (gs *GameServer) ShiftDaysHandler(c *gin.Context) {
+	var request struct {
+		ShiftDateDays int `json:"ShiftDateDays"`
+	}
+	if err := c.BindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+	eventSender.ShiftDateDays = request.ShiftDateDays
+
+	c.JSON(http.StatusOK, gin.H{})
 }
 
 func (gs *GameServer) checkAnswer(questionID string, submittedAnswer int) (bool, error) {
@@ -242,14 +250,9 @@ func shuffleQuestions(questions []Question) []Question {
 	rand.Seed(time.Now().UnixNano())
 	qs := make([]Question, len(questions))
 
-	// Copy the questions manually, instead of with copy(), so that we can remove
-	// the CorrectIndex property
+	// Include correct answer with questionm to make debugging easier.
+	// TODO: only include it in debug build
 	for i, q := range questions {
-		// qs[i] = Question{
-		// 	ID: q.ID, 
-		// 	QuestionText: q.QuestionText, 
-		// 	Options: q.Options,
-		// }
 		qs[i] = Question(q)
 	}
 

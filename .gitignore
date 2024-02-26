@@ -121,3 +121,4 @@ backend/__debug_*
 .ipynb_checkpoints
 jupyter/logs
 *.code-workspace
+go.work
