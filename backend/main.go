@@ -62,6 +62,10 @@ type GameServer struct {
 }
 
 func main() {
+
+	Db = EventServiceConnect()
+	defer EventServiceClose()
+
 	// Setup the server
 	router, err := setupServer()
 	if err != nil {
@@ -115,20 +119,51 @@ func NewGameServer(questions []Question, store *SessionStore) *GameServer {
 }
 
 func (gs *GameServer) StartGameHandler(c *gin.Context) {
+
+	// contextJson, err := json.Marshal(c.Request.Header)
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid context: " + err.Error()})
+	// 	return
+	// }
 	sessionID := gs.Sessions.CreateSession()
 	c.JSON(http.StatusOK, gin.H{"sessionId": sessionID})
+
+	EventServicePost(&Event{
+		SessionID: sessionID,
+		Type:      "start_game",
+		Data:      fmt.Sprintf("{\"sessionId\": \"%s\"}", sessionID),
+		// Context: *c.Request,
+	})
 }
 
 func (gs *GameServer) QuestionsHandler(c *gin.Context) {
 	shuffledQuestions := shuffleQuestions(gs.Questions)
-	c.JSON(http.StatusOK, shuffledQuestions[:10])
+	questions := shuffledQuestions[:10]
+	json, _ := json.Marshal(questions)
+	// log.Println(json)
+	// log.Println(err)
+	c.JSON(http.StatusOK, questions)
+	
+	// TODO: Session ID not available for this call.  Suggest including
+	// it in the call to allow linking the call to a session.
+	EventServicePost(&Event{
+		Type:      "get_questions",
+		Data: string(json),
+	})
 }
 
 func (gs *GameServer) AnswerHandler(c *gin.Context) {
-	var submittedAnswer struct {
+	type SubmittedAnswer struct {
 		SessionID  string `json:"sessionId"`
 		QuestionID string `json:"questionId"`
 		Answer     int    `json:"answer"`
+	}
+
+	var submittedAnswer SubmittedAnswer;
+	var eventData struct {
+		Answer SubmittedAnswer;
+		Correct bool;
+		CurrentScore int;
 	}
 	if err := c.ShouldBindJSON(&submittedAnswer); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body: " + err.Error()})
@@ -155,6 +190,19 @@ func (gs *GameServer) AnswerHandler(c *gin.Context) {
 		"correct":      correct,
 		"currentScore": session.Score, // Return the current score
 	})
+	eventData.Answer = submittedAnswer
+	eventData.Correct = correct
+	eventData.CurrentScore = session.Score
+
+	json, _ := json.Marshal(eventData)
+
+	EventServicePost(&Event{
+		SessionID: submittedAnswer.SessionID,
+		Type:      "answer",
+		Data:      string(json),
+		// Context: *c.Request,
+	})
+
 }
 
 func (gs *GameServer) EndGameHandler(c *gin.Context) {
@@ -173,6 +221,12 @@ func (gs *GameServer) EndGameHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"finalScore": session.Score})
+	EventServicePost(&Event{
+		SessionID: request.SessionID,
+		Type:      "end_game",
+		Data:      fmt.Sprintf("{\"finalScore\": \"%d\"}", session.Score),
+		// Context: *c.Request,
+	})
 }
 
 func (gs *GameServer) checkAnswer(questionID string, submittedAnswer int) (bool, error) {
@@ -191,7 +245,12 @@ func shuffleQuestions(questions []Question) []Question {
 	// Copy the questions manually, instead of with copy(), so that we can remove
 	// the CorrectIndex property
 	for i, q := range questions {
-		qs[i] = Question{ID: q.ID, QuestionText: q.QuestionText, Options: q.Options}
+		// qs[i] = Question{
+		// 	ID: q.ID, 
+		// 	QuestionText: q.QuestionText, 
+		// 	Options: q.Options,
+		// }
+		qs[i] = Question(q)
 	}
 
 	rand.Shuffle(len(qs), func(i, j int) {

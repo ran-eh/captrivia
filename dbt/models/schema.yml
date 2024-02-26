@@ -1,0 +1,6 @@
+sources:
+  - name: captrivia
+    database: captrivia
+    schema: public
+    tables:
+      - name: events
