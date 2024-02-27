@@ -11,6 +11,7 @@ services:
       DB_PASSWORD: postgres
       DB_NAME: captrivia
       DB_PORT: 5432
+      PG_PASSWORD: postgres
     depends_on:
       - db
     volumes:
@@ -37,16 +38,30 @@ services:
 
   db:
     image: postgres:13-alpine
+    build: ./db
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: captrivia
+      PG_PASSWORD: postgres
     volumes:
       - type: volume
         source: postgres_data
         target: /var/lib/postgresql/data
+
+  jupyter:
+    build: ./jupyter
+    image: jupyter/minimal-notebook
+    command: start-notebook.sh --NotebookApp.token=''
+    volumes:
+      - ./work:/home/jovyan/work
+    ports:
+      - 8888:8888
+    depends_on:
+      - db
+
 
 volumes:
   postgres_data:

@@ -10,8 +10,8 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const (
-	host     = "localhost"
+var (
+	host     = "db"
 	port     = 5432
 	user     = "postgres"
 	password = "postgres"
@@ -65,5 +65,8 @@ func (es *EventSender) Send(ev *Event) error {
 	_, err := es.Db.Exec(sql, ev.Timestamp, ev.SessionID, ev.Program, ev.Type, ev.Data)
 
 	log.Println(ev)
+	if err != nil {
+		log.Println(err)
+	}
 	return err
 }
