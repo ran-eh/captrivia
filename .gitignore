@@ -122,3 +122,4 @@ backend/__debug_*
 jupyter/logs
 *.code-workspace
 go.work
+dbt/profiles/.user.yml

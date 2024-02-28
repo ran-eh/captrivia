@@ -21,11 +21,10 @@ https://github.com/ProlificLabs/captrivia/compare/main...ran-eh:captrivia:main
 ## Running the code
 - Clone the forked repo https://github.com/ran-eh/captrivia
 - In it'a root directory, run `docker compose up`
-- Create events table
-```
-$ export PGPASSWORD=postgres; psql -f db/up.pgsql -h localhost -U postgres -d captrivia
-```
-- 
+- Create ten days worth of events
+  - Follow the instructions in ./bot to run the bot.
+- View games report
+  - Open 
 ## Quickstart
 
 1. Make sure you have Docker installed. https://docs.docker.com/engine/install/

@@ -46,6 +46,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: captrivia
       PG_PASSWORD: postgres
+
     volumes:
       - type: volume
         source: postgres_data
@@ -61,6 +62,16 @@ services:
       - 8888:8888
     depends_on:
       - db
+  dbt:
+    # container_name: dbt
+    build: ./dbt
+    image: dbt-captrivia
+    volumes:
+      - ./:/usr/src/dbt
+    depends_on:
+      - db
+    environment:
+      DBT_PROFILES_DIR: ./profiles
 
 
 volumes:
