@@ -56,14 +56,11 @@ services:
     build: ./jupyter
     image: jupyter/minimal-notebook
     command: start-notebook.sh --NotebookApp.token=''
-    volumes:
-      - ./work:/home/jovyan/work
     ports:
       - 8888:8888
     depends_on:
       - db
   dbt:
-    # container_name: dbt
     build: ./dbt
     image: dbt-captrivia
     volumes:
