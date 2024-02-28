@@ -11,6 +11,7 @@ services:
       DB_PASSWORD: postgres
       DB_NAME: captrivia
       DB_PORT: 5432
+      PG_PASSWORD: postgres
     depends_on:
       - db
     volumes:
@@ -31,22 +32,44 @@ services:
         source: node_modules
         target: /app/node_modules
     environment:
-      REACT_APP_BACKEND_URL: http://backend:8080
+      REACT_APP_BACKEND_URL: http://localhost:8080
     depends_on:
       - backend
 
   db:
     image: postgres:13-alpine
+    build: ./db
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: captrivia
+      PG_PASSWORD: postgres
+
     volumes:
       - type: volume
         source: postgres_data
         target: /var/lib/postgresql/data
+
+  jupyter:
+    build: ./jupyter
+    image: jupyter/minimal-notebook
+    command: start-notebook.sh --NotebookApp.token=''
+    ports:
+      - 8888:8888
+    depends_on:
+      - db
+  dbt:
+    build: ./dbt
+    image: dbt-captrivia
+    volumes:
+      - ./:/usr/src/dbt
+    depends_on:
+      - db
+    environment:
+      DBT_PROFILES_DIR: ./profiles
+
 
 volumes:
   postgres_data:

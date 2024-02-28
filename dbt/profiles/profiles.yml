@@ -1,0 +1,12 @@
+pulley:
+  outputs:
+    dev:
+      type: postgres
+      threads: 5
+      host: db
+      port: 5432
+      user: postgres
+      pass: postgres
+      dbname: captrivia
+      schema: public
+  target: dev
