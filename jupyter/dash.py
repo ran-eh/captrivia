@@ -1,14 +1,10 @@
 # %%
-import sys
-sys.path.append('/Users/reh/.pyenv/versions/bot/lib/python3.11/site-packages')
-
-# %%
 import sqlalchemy
 import pandas as pd
-engine = sqlalchemy.create_engine('postgresql://postgres:postgres@localhost:5432/captrivia')
+engine = sqlalchemy.create_engine('postgresql://postgres:postgres@db:5432/captrivia')
 
 # %%
-results = pd.read_sql('SELECT * FROM daily', engine)
+results = pd.read_sql('SELECT * FROM daily ORDER BY start_date', engine)
 results
 
 # %%

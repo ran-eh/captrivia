@@ -5,4 +5,5 @@ USER 1000
 WORKDIR /work
 COPY ./requirements.txt /tmp/requirements.txt
 RUN pip install -r /tmp/requirements.txt
-COPY ./*ipynb .
+COPY ./dash.py .
+RUN ipynb-py-convert dash.py dash.ipynb
